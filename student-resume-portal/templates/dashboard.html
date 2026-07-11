@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Student Resume Portal{% endblock %}
+
+{% block content %}
+<div class="row mb-4 fade-in">
+    <div class="col-12">
+        <h1 class="display-6 fw-bold">
+            <i class="bi bi-graph-up me-2"></i>Dashboard
+        </h1>
+        <p class="lead text-muted">Overview of student resume portal statistics</p>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-6 mb-4">
+        <div class="stat-card fade-in">
+            <i class="bi bi-people-fill fs-1 mb-2"></i>
+            <h2>{{ total_students }}</h2>
+            <p>Total Students</p>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="stat-card fade-in" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+            <i class="bi bi-calendar-week fs-1 mb-2"></i>
+            <h2>{{ recent_students }}</h2>
+            <p>Added This Week</p>
+        </div>
+    </div>
+</div>
+
+<!-- Azure Services Info -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-cloud-fill me-2"></i>Azure Cloud Services Integration
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="text-center">
+                            <i class="bi bi-server fs-1 text-primary"></i>
+                            <h6 class="mt-2">Azure App Service</h6>
+                            <p class="small text-muted">Linux-based web hosting with Python runtime</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="text-center">
+                            <i class="bi bi-database fs-1 text-success"></i>
+                            <h6 class="mt-2">Azure SQL Database</h6>
+                            <p class="small text-muted">Cloud database for student records</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="text-center">
+                            <i class="bi bi-hdd fs-1 text-info"></i>
+                            <h6 class="mt-2">Azure Blob Storage</h6>
+                            <p class="small text-muted">Scalable file storage for resumes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-lightning-charge me-2"></i>Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <a href="/upload" class="btn btn-azure w-100">
+                            <i class="bi bi-upload me-2"></i>Upload Resume
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="/" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-people me-2"></i>View All Students
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="/search?q=python" class="btn btn-outline-info w-100">
+                            <i class="bi bi-search me-2"></i>Search Skills
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <button class="btn btn-outline-secondary w-100" onclick="location.reload()">
+                            <i class="bi bi-arrow-clockwise me-2"></i>Refresh Stats
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-clock-history me-2"></i>Getting Started Guide
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="border rounded p-3 h-100">
+                            <h6 class="fw-bold">
+                                <span class="badge bg-primary me-2">1</span>
+                                Upload Resume
+                            </h6>
+                            <p class="small text-muted">Start by uploading your first student resume with details.</p>
+                            <a href="/upload" class="btn btn-sm btn-azure">Go to Upload</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="border rounded p-3 h-100">
+                            <h6 class="fw-bold">
+                                <span class="badge bg-primary me-2">2</span>
+                                Search Students
+                            </h6>
+                            <p class="small text-muted">Use the search functionality to find students by name or skills.</p>
+                            <a href="/search?q=developer" class="btn btn-sm btn-outline-primary">Try Search</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="border rounded p-3 h-100">
+                            <h6 class="fw-bold">
+                                <span class="badge bg-primary me-2">3</span>
+                                Manage Profiles
+                            </h6>
+                            <p class="small text-muted">Edit student details or delete profiles as needed.</p>
+                            <a href="/" class="btn btn-sm btn-outline-secondary">View Students</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

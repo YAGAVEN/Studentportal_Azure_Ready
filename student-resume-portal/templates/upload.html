@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Resume - Student Resume Portal{% endblock %}
+
+{% block content %}
+<div class="row mb-4 fade-in">
+    <div class="col-12">
+        <h1 class="display-6 fw-bold">
+            <i class="bi bi-upload me-2"></i>Upload Student Resume
+        </h1>
+        <p class="lead text-muted">Fill in the student details and upload their resume</p>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-person-plus me-2"></i>Student Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">
+                                <i class="bi bi-person me-1"></i>Full Name *
+                            </label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                   placeholder="John Doe" required>
+                            <div class="form-text">Enter the student's full name</div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">
+                                <i class="bi bi-envelope me-1"></i>Email Address *
+                            </label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                   placeholder="john@example.com" required>
+                            <div class="form-text">Must be unique (not used before)</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="skills" class="form-label">
+                            <i class="bi bi-tools me-1"></i>Skills
+                        </label>
+                        <input type="text" class="form-control" id="skills" name="skills"
+                               placeholder="Python, Flask, Azure, SQL, JavaScript">
+                        <div class="form-text">Enter skills separated by commas</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="resume" class="form-label">
+                            <i class="bi bi-file-earmark-text me-1"></i>Resume File *
+                        </label>
+                        <input type="file" class="form-control" id="resume" name="resume"
+                               accept=".pdf,.doc,.docx" required>
+                        <div class="form-text">
+                            Accepted formats: PDF, DOC, DOCX (Max 10 MB)
+                        </div>
+                    </div>
+
+                    <!-- File Preview -->
+                    <div id="filePreview" class="mb-3" style="display: none;">
+                        <div class="alert alert-info">
+                            <i class="bi bi-file-earmark me-2"></i>
+                            <span id="fileName"></span>
+                            <span id="fileSize" class="ms-2 text-muted"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-azure flex-grow-1" id="submitBtn">
+                            <i class="bi bi-cloud-upload me-2"></i>Upload Resume
+                        </button>
+                        <a href="/" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle me-2"></i>Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Instructions Card -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="bi bi-info-circle me-2"></i>Upload Guidelines
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold">Requirements:</h6>
+                        <ul class="small text-muted">
+                            <li>Full name and email are required</li>
+                            <li>Email must be unique</li>
+                            <li>Resume file is required</li>
+                            <li>File size: Maximum 10 MB</li>
+                            <li>Accepted formats: PDF, DOC, DOCX</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold">Azure Cloud Storage:</h6>
+                        <ul class="small text-muted">
+                            <li>Resumes stored in Azure Blob Storage</li>
+                            <li>Student data in Azure SQL Database</li>
+                            <li>Automatic cloud backup</li>
+                            <li>High availability and scalability</li>
+                            <li>Secure file access</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Modal -->
+<div class="modal fade" id="loadingModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center py-4">
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h5>Uploading Resume</h5>
+                <p class="text-muted">Please wait while we upload your resume to Azure cloud storage...</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('uploadForm');
+    const fileInput = document.getElementById('resume');
+    const submitBtn = document.getElementById('submitBtn');
+    const filePreview = document.getElementById('filePreview');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
+
+    // File input change handler
+    fileInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            // Show file preview
+            fileName.textContent = file.name;
+            fileSize.textContent = '(' + (file.size / (1024 * 1024)).toFixed(2) + ' MB)';
+            filePreview.style.display = 'block';
+
+            // Validate file size
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size exceeds 10 MB limit. Please choose a smaller file.');
+                fileInput.value = '';
+                filePreview.style.display = 'none';
+            }
+        } else {
+            filePreview.style.display = 'none';
+        }
+    });
+
+    // Form submission handler
+    form.addEventListener('submit', function(e) {
+        // Show loading modal
+        loadingModal.show();
+
+        // Disable submit button
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Uploading...';
+    });
+
+    // Email uniqueness check (client-side)
+    const emailInput = document.getElementById('email');
+    emailInput.addEventListener('blur', function() {
+        const email = this.value;
+        if (email && email.includes('@')) {
+            // You could add AJAX check here for real-time validation
+            // For now, we'll let the server handle it
+        }
+    });
+});
+</script>
+{% endblock %}
