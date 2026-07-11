@@ -54,6 +54,7 @@ jobs:
         zip -r deployment-package.zip . -x "*.git*" "*venv*" "*tests*" "*.md" ".dockerignore" "deployment-package.zip"
 
     - name: Deploy to Azure Web App
+      if: github.event_name != 'pull_request'
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
